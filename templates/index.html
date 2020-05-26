@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <title>Flight Delay Prediction</title>
+
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
+
+    <!-- Custom stlylesheet -->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    
+    <style>
+    #booking 
+    {
+	font-family: 'Lato', sans-serif;
+    background: url(../static/background.jpg);
+	background-size: cover;
+	background-position: center;
+	color: #191a1e;
+    }
+    </style>
+    <!--<img src="{{url_for('static', filename='background.png')}}" />-->
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+</head>
+
+<body>
+    <div id="booking" class="section">
+        <div class="section-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="booking-cta">
+                            <h1>Flight Delay Prediction</h1>
+                            <p></p>
+                            <div class="container">
+                                <!-- {{ prediction_text }} -->
+                                {% if prediction_text == 0 %}
+                                <h2>The flight is not delayed</h2>
+
+                                {% elif prediction_text == 1 %}
+                                <h2>The flight is delayed</h2>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-7 col-md-offset-1">
+                        <div class="booking-form">
+                            <form action={{ url_for("predict") }} method="post">
+                               
+                                <div class="row">
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <span class="form-label">Year</span>
+                                                <input type="text" class="form-control" name="year" placeholder="Enter year" required="true">
+                                            <span class="select-arrow"></span>
+                                        </div>
+                                    </div>
+                                    <!Year>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <span class="form-label">Month</span>
+                                                <input type="text" class="form-control" name="month" placeholder="Enter month" required="true">
+                                                <span class="select-arrow"></span>
+                                            </div>
+                                        </div>
+                                        <!Month>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <span class="form-label">Date</span>
+                                                <input type="text" class="form-control" name="day" placeholder="Enter date" required="true">
+                                                    <span class="select-arrow"></span>
+                                                </div>
+                                            </div>
+                                            <! Date>
+
+                                </div>
+                                <!--Year,Month,Date end-->
+
+                                <div class="row">
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <span class="form-label">Select an Airline</span>
+                                            <!-- <input class="form-control" type="date" required> -->
+                                            <select class="form-control" name="carrier">
+                                                <option value="UA">United Air Lines Inc.(UA)</option>
+                                                <option value="AA">American Airlines Inc.(AA)</option>
+                                                <option value="US">US Airways Inc.(US)</option>
+                                                <option value="F9">Frontier Airlines Inc.(F9)</option>
+                                                <option value="B6">JetBlue Airways(B6)</option>
+                                                <option value="OO">Skywest Airlines Inc.(OO)</option>
+                                                <option value="AS">Alaska Airlines Inc.(AS)</option>
+                                                <option value="WN">Southwest Airlines Co.(WN)</option>
+                                                <option value="DL">Delta Air Lines Inc.(DL)</option>
+                                                <option value="EV">Atlantic Southeast Airlines(EV)</option>
+                                                <option value="HA">Hawaiian Airlines Inc.(HA)</option>
+                                                <option value="MQ">American Eagle Airlines Inc.(MQ)</option>
+                                                <option value="VX">Virgin America(VX)</option>
+                                                <option value="9E">Endeavor Air(9E)</option>
+                                                <option value="FL">AirTran Airways(FL)</option>
+                                                <option value="YV">Mesa Airlines(YV)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!Airline>
+
+                                </div>
+                                <!--Airline end-->
+
+                                <div class="row">
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <span class="form-label">Flying from</span>
+                                            <!--<input class="form-control" type="text" placeholder="City or airport">-->
+                                            <select class="form-control" name="origin">
+                                                <option value="EWR">Newark Liberty International Airport(EWR)</option>
+                                                <option value="JFK">John F. Kennedy International Airport(New York International Airport)(JFK)</option>
+                                                <option value="LGA">LaGuardia Airport(Marine Air Terminal)(LGA)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!Flying from>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <span class="form-label">Flying to</span>
+                                                <!-- <input class="form-control" type="text" placeholder="City or airport"> -->
+                                                <select class="form-control" name="dest">
+                                                    <option value="ATL">Hartsfield-Jackson Atlanta International Airport(ATL)</option>
+                                                    <option value="ORD">Chicago O'Hare International Airport(ORD)</option>
+                                                    <option value="LAX">Los Angeles International Airport(LAX)</option>
+                                                    <option value="BOS">Gen. Edward Lawrence Logan International Airport(BOS)</option>
+                                                    <option value="MCO">Orlando International Airport(MCO)</option>
+                                                    <option value="CLT">Charlotte Douglas International Airport(CLT)</option>
+                                                    <option value="SFO">San Francisco International Airport(SFO)</option>
+                                                    <option value="FLL">Fort Lauderdale-Hollywood International Airport(FLL)</option>
+                                                    <option value="MIA">Miami International Airport(MIA)</option>
+                                                    <option value="DCA">Ronald Reagan Washington National Airport(DCA)</option>
+                                                    <option value="DTW">Detroit Metropolitan Airport(DTW)</option>
+                                                    <option value="DFW">Dallas/Fort Worth International Airport(DFW)</option>
+                                                    <option value="RDU">Raleigh-Durham International Airport(RDU)</option>
+                                                    <option value="TPA">Tampa International Airport(TPA)</option>
+                                                    <option value="DEN">Denver International Airport(DEN)</option>
+                                                    <option value="IAH">George Bush Intercontinental Airport(IAH)</option>
+                                                    <option value="MSP">Minneapolis-Saint Paul International Airport(MSP)</option>
+                                                    <option value="PBI">Palm Beach International Airport(PBI)</option>
+                                                    <option value="BNA">Nashville International Airport(BNA)</option>
+                                                    <option value="LAS">McCarran International Airport(LAS)</option>
+                                                    <option value="SJU">Luis MuÃ±oz MarÃ-n International Airport(SJU)</option>
+                                                    <option value="IAD">Washington Dulles International Airport(IAD)</option>
+                                                    <option value="PHX">Phoenix Sky Harbor International Airport(PHX)</option>
+                                                    <option value="BUF">Buffalo Niagara International Airport(BUF)</option>
+                                                    <option value="CLE">Cleveland Hopkins International Airport(CLE)</option>
+                                                    <option value="STL">St. Louis International Airport at Lambert Field(STL)</option>
+                                                    <option value="MDW">Chicago Midway International Airport(MDW)</option>
+                                                    <option value="SEA">Seattle-Tacoma International Airport(SEA)</option>
+                                                    <option value="CVG">Cincinnati/Northern Kentucky International Airport(CVG)</option>
+                                                    <option value="MSY">Louis Armstrong New Orleans International Airport(MSY)</option>
+                                                    <option value="RSW">Southwest Florida International Airport(RSW)</option>
+                                                    <option value="CMH">Port Columbus International Airport(CMH)</option>
+                                                    <option value="CHS">Charleston International Airport/Charleston AFB(CHS)</option>
+                                                    <option value="PIT">Pittsburgh International Airport(PIT)</option>
+                                                    <option value="SAN">San Diego International AirportÂ (Lindbergh Field)(SAN)</option>
+                                                    <option value="MKE">General Mitchell International Airport(MKE)</option>
+                                                    <option value="JAX">Jacksonville International Airport(JAX)</option>
+                                                    <option value="BTV">Burlington International Airport(BTV)</option>
+                                                    <option value="SLC">Salt Lake City International Airport(SLC)</option>
+                                                    <option value="AUS">Austin-Bergstrom International Airport(AUS)</option>
+                                                    <option value="ROC">Greater Rochester International Airport(ROC)</option>
+                                                    <option value="RIC">Richmond International Airport(RIC)</option>
+                                                    <option value="PWM">Portland International Jetport(PWM)</option>
+                                                    <option value="HOU">William P. Hobby Airport(HOU)</option>
+                                                    <option value="IND">Indianapolis International Airport(IND)</option>
+                                                    <option value="MCI">Kansas City International Airport(MCI)</option>
+                                                    <option value="SYR">Syracuse Hancock International Airport(SYR)</option>
+                                                    <option value="BWI">Baltimore-Washington International Airport(BWI)</option>
+                                                    <option value="MEM">Memphis International Airport(MEM)</option>
+                                                    <option value="PHL">Philadelphia International Airport(PHL)</option>
+                                                    <option value="GSO">Piedmont Triad International Airport(GSO)</option>
+                                                    <option value="ORF">Norfolk International Airport(ORF)</option>
+                                                    <option value="DAY">James M. Cox Dayton International Airport(DAY)</option>
+                                                    <option value="PDX">Portland International Airport(PDX)</option>
+                                                    <option value="SRQ">Sarasota-Bradenton International Airport(SRQ)</option>
+                                                    <option value="SDF">Louisville International AirportÂ (Standiford Field)(SDF)</option>
+                                                    <option value="XNA">Northwest Arkansas Regional Airport(XNA)</option>
+                                                    <option value="MHT">Manchester-Boston Regional Airport(MHT)</option>
+                                                    <option value="BQN">Rafael HernÃ¡ndez Airport(BQN)</option>
+                                                    <option value="CAK">Akron-Canton Regional Airport(CAK)</option>
+                                                    <option value="OMA">Eppley Airfield(OMA)</option>
+                                                    <option value="SNA">John Wayne AirportÂ (Orange County Airport)(SNA)</option>
+                                                    <option value="GSP">Greenville-Spartanburg International Airport(GSP)</option>
+                                                    <option value="SAV">Savannah/Hilton Head International Airport(SAV)</option>
+                                                    <option value="GRR">Gerald R. Ford International Airport(GRR)</option>
+                                                    <option value="HNL">Honolulu International Airport(HNL)</option>
+                                                    <option value="LGB">Long Beach AirportÂ (Daugherty Field)(LGB)</option>
+                                                    <option value="SAT">San Antonio International Airport(SAT)</option>
+                                                    <option value="TYS">McGhee Tyson Airport(TYS)</option>
+                                                    <option value="MSN">Dane County Regional Airport(MSN)</option>
+                                                    <option value="DSM">Des Moines International Airport(DSM)</option>
+                                                    <option value="STT">Cyril E. King Airport(STT)</option>
+                                                    <option value="ALB">Albany International Airport(ALB)</option>
+                                                    <option value="BDL">Bradley International Airport(BDL)</option>
+                                                    <option value="BUR">Bob Hope AirportÂ (Hollywood Burbank Airport)(BUR)</option>
+                                                    <option value="PVD">Theodore Francis Green State Airport(PVD)</option>
+                                                    <option value="BGR">Bangor International Airport(BGR)</option>
+                                                    <option value="PSE">Mercedita Airport(PSE)</option>
+                                                    <option value="SJC">Norman Y. Mineta San JosÃ© International Airport(SJC)</option>
+                                                    <option value="OKC">Will Rogers World Airport(OKC)</option>
+                                                    <option value="AOK">Oakland International Airport(OAK)</option>
+                                                    <option value="TUL">Tulsa International Airport(TUL)</option>
+                                                    <option value="SMF">Sacramento International Airport(SMF)</option>
+                                                    <option value="BMH">Birmingham-Shuttlesworth International Airport(BHM)</option>
+                                                    <option value="ACK">Nantucket Memorial Airport(ACK)</option>
+                                                    <option value="AVL">Asheville Regional Airport(AVL)</option>
+                                                    <option value="ABQ">Albuquerque International Sunport(ABQ)</option>
+                                                    <option value="MVY">Martha's Vineyard Airport(MVY)</option>
+                                                    <option value="EGE">Eagle County Regional Airport(EGE)</option>
+                                                    <option value="CRW">Yeager Airport(CRW)</option>
+                                                    <option value="ILM">Wilmington International Airport(ILM)</option>
+                                                    <option value="CAE">Columbia Metropolitan Airport(CAE)</option>
+                                                    <option value="TVC">Cherry Capital Airport(TVC)</option>
+                                                    <option value="MYR">Myrtle Beach International Airport(MYR)</option>
+                                                    <option value="CHO">Charlottesville-Albemarle Airport(CHO)</option>
+                                                    <option value="BZN">Bozeman Yellowstone International AirportÂ (Gallatin Field Airport)(BZN)</option>
+                                                    <option value="JAC">Jackson Hole Airport(JAC)</option>
+                                                    <option value="PSP">Palm Springs International Airport(PSP)</option>
+                                                    <option value="EYW">Key West International Airport(EYW)</option>
+                                                    <option value="HDN">Yampa Valley AirportÂ (Yampa Valley Regional)(HDN)</option>
+                                                    <option value="MTJ">Montrose Regional Airport(MTJ)</option>
+                                                    <option value="SBN">South Bend International AirportÂ (South Bend Regional)(SBN)</option>
+                                                    <option value="ANC">Ted Stevens Anchorage International Airport(ANC)</option>
+                                                    <option value="LEX">Blue Grass Airport(LEX)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!Flying to>
+
+                                </div>
+                                <!--Flying to,from end-->
+
+                                <div class="form-btn">
+                                    <button class="submit-btn">Predict</button>
+                                </div>
+                                <!Button>
+
+                            </form>
+                            <!--Form end-->
+
+                        </div>
+                        <!Booking form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
