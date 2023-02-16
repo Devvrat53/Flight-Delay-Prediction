@@ -14,4 +14,4 @@ scipy==1.4.1
 six==1.15.0
 sklearn==0.0
 threadpoolctl==2.0.0
-Werkzeug==1.0.1
+Werkzeug==2.2.3
